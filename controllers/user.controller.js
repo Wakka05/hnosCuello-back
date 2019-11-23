@@ -1,5 +1,12 @@
 const User = require('../models/user.model');
 
+exports.get = function (req, res) {
+    User.find({}, function (err, docs) {
+        if (err) return next(err);
+        res.send(docs);
+    });
+};
+
 exports.details = function (req,res) {
     User.findById(req.params.id, function (err, user) {
         if (err) return next(err);

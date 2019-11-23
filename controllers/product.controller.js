@@ -1,5 +1,12 @@
 const Product = require('../models/product.model');
 
+exports.get = function (req, res) {
+    Product.find({}, function (err, docs) {
+        if (err) return next(err);
+        res.send(docs);
+    });
+};
+
 exports.details = function (req,res) {
     Product.findById(req.params.id, function (err, product) {
         if (err) return next(err);

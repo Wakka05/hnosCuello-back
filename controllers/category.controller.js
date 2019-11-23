@@ -1,14 +1,16 @@
 const Category = require('../models/category.model');
 
-//Simple version, without validation or sanitation
-exports.test = function (req, res) {
-    res.send('Greetings from the Test controller!');
+exports.get = function (req, res) {
+    Category.find({}, function (err, docs) {
+        if (err) return next(err);
+        res.send(docs);
+    });
 };
 
 exports.details = function (req,res) {
     Category.findById(req.params.id, function (err, category) {
         if (err) return next(err);
-        res.send(category);
+        res.json(category);
     })
 };
 

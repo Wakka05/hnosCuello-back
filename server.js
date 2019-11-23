@@ -1,10 +1,12 @@
-const express = require('express');
+const express = require('express')
+  , cors = require('cors')
+  , app = express();
 const bodyParser = require('body-parser');
 
 const categoryRoute = require('./routes/category.route');
 const productRoute = require('./routes/product.route');
 const userRoute = require('./routes/user.route');
-const app = express();
+//const app = express();
 
 //const router = express().Router();
 //const MongoClient = require('mongodb').MongoClient;
@@ -25,6 +27,23 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+// CORS configuration
+const originsWhitelist = [
+  'http://localhost:4200',      //front-end url for development
+   // 'URL of prod-environment -> http://www.hnoscuello.es'
+];
+const corsOptions = {
+  origin: function(origin, callback){
+        var isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
+        callback(null, isWhitelisted);
+  },
+  credentials:true
+}
+
+// Enable CORS in the app
+app.use(cors(corsOptions));
+
 // Categories CRUD
 app.use('/categories', categoryRoute);
 app.use('/products', productRoute);

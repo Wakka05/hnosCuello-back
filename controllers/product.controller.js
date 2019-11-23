@@ -1,14 +1,27 @@
 const Product = require('../models/product.model');
+// Pagination of queries
+const PAGE = 0;
+const LIMIT = 10;
 
-exports.get = function (req, res) {
-    Product.find({}, function (err, docs) {
+exports.getAll = function (req, res) {
+    const limit = req.query.limit ? +req.query.limit : LIMIT;
+    const page = req.query.page ? +req.query.page : PAGE;
+    let query;
+
+    if (req.query.idCategory) {
+        query = Product.find({ idCategory: req.query.idCategory }).limit(limit).skip(limit * page);
+    } else {
+        query = Product.find({}).limit(limit).skip(limit * page);
+    }
+    query.exec(function (err, docs) {
         if (err) return next(err);
         res.send(docs);
     });
+
 };
 
 exports.details = function (req,res) {
-    Product.find({ idCategory: req.params.id}, function (err, product) {
+    Product.find({ id: req.params.id}, function (err, product) {
         if (err) return next(err);
         res.send(product);
     })

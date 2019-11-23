@@ -1,7 +1,13 @@
 const User = require('../models/user.model');
+// Pagination of queries
+const PAGE = 0;
+const LIMIT = 10;
 
-exports.get = function (req, res) {
-    User.find({}, function (err, docs) {
+exports.getAll = function (req, res) {
+    const limit = req.query.limit ? +req.query.limit : LIMIT;
+    const page = req.query.page ? +req.query.page : PAGE;
+
+    User.find({}, null, { limit: limit, skip: page }, function (err, docs) {
         if (err) return next(err);
         res.send(docs);
     });

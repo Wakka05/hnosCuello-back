@@ -21,7 +21,7 @@ exports.getAll = function (req, res) {
 };
 
 exports.details = function (req,res) {
-    Product.find({ id: req.params.id}, function (err, product) {
+    Product.findById(req.params.id, function (err, product) {
         if (err) return next(err);
         res.send(product);
     })

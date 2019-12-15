@@ -1,7 +1,10 @@
-const User = require('../models/user.model');
+const mongoose = require('mongoose');
+//const User = require('../models/user.model');
 // Pagination of queries
 const PAGE = 0;
 const LIMIT = 10;
+const User = mongoose.model('User');
+const passport = require('passport');
 
 exports.getAll = function (req, res) {
     const limit = req.query.limit ? +req.query.limit : LIMIT;
@@ -13,47 +16,73 @@ exports.getAll = function (req, res) {
     });
 };
 
-exports.details = function (req,res) {
+exports.details = function (req,res, next) {
     User.findById(req.params.id, function (err, user) {
         if (err) return next(err);
         res.send(user);
     })
 };
 
-exports.create = function (req, res) {
+exports.register = function (req, res, next) {
     const user = new User(
         {
             name: req.body.name,
-            title: req.body.title,
-            picture: req.body.picture,
-            roles: req.body.roles,
-            email: req.body.email
+            surnames: req.body.surnames,
+            password: req.body.password,
+            //picture: req.body.picture,
+            //roles: req.body.roles,
+            roles: 'U0',
+            email: req.body.email,
+            idOrder: null
         }
     );
 
-    if (user.roles && user.roles.length ===0) {
-        user.roles.push('U0');
-    }
-
     user.save(function (err) {
+        let token;
+        token = user.generateJwt();
         if (err) {
             return next(err);
         }
-        res.send('User created successfully');
+        res.status(200);
+        res.json({
+            "token": token
+        });
+        //res.send('User created successfully');
     })
 };
 
-exports.update = function (req,res) {
+exports.login = function (req, res) {
+    passport.authenticate('local', function (err, user, info) {
+        let token;
+
+        if (err) {
+            res.status(404).json(err);
+            return;
+        }
+
+        if (user) {
+            token = user.generateJwt();
+            res.status(200);
+            res.json({
+                'token': token
+            });
+        } else {
+            res.status(401).json(info);
+        }
+    }) (req, res);
+};
+
+exports.update = function (req,res,next) {
     User.findByIdAndUpdate(req.params.id, {$set: req.body},
         function (err, user) {
             if (err) return next(err);
-            res.send('User updated');
+            res.send(user);
         });
 };
 
-exports.delete = function (req,res) {
-    User.findByIdAndRemove(req.params.id, function (err, user) {
+exports.delete = function (req,res,next) {
+    User.findByIdAndRemove(req.params._id, function (err, user) {
         if (err) return next(err);
-        res.send('User deleted');
+        res.send(user);
     });
 };

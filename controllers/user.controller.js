@@ -73,7 +73,7 @@ exports.login = function (req, res) {
 };
 
 exports.update = function (req,res,next) {
-    User.findByIdAndUpdate(req.params.id, {$set: req.body},
+    User.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true},
         function (err, user) {
             if (err) return next(err);
             res.send(user);
@@ -81,7 +81,7 @@ exports.update = function (req,res,next) {
 };
 
 exports.delete = function (req,res,next) {
-    User.findByIdAndRemove(req.params._id, function (err, user) {
+    User.findByIdAndRemove(req.params._id, {new: true}, function (err, user) {
         if (err) return next(err);
         res.send(user);
     });

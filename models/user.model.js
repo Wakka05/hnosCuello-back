@@ -10,7 +10,7 @@ const UserSchema = new Schema({
     roles: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    idOrder: {type: []},
+    orders: {type: []},
     favorites: {type: []}
 }, { collection: 'user' });
 
@@ -24,6 +24,7 @@ UserSchema.methods.generateJwt = function() {
         name: this.name,
         surnames: this.surnames,
         roles: this.roles,
+        orders: this.orders,
         exp: parseInt(expiry.getTime() / 1000)
     }, 'MY_SECRET')
 };

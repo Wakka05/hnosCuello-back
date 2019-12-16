@@ -33,7 +33,7 @@ exports.register = function (req, res, next) {
             //roles: req.body.roles,
             roles: 'U0',
             email: req.body.email,
-            idOrder: null
+            orders: []
         }
     );
 

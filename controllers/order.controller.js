@@ -11,7 +11,8 @@ exports.create = function (req, res, next) {
     const order = new Order(
         {
             product: req.body.product,
-            quantity: req.body.quantity
+            quantity: req.body.quantity,
+            finalPrice: req.body.finalPrice
         }
     );
 

@@ -9,6 +9,7 @@ let OrderSchema = new Schema({
         idCategory: {type: String, required: true}
     }, required: true},
     quantity: {type: Number, required: true},
+    finalPrice: {type: String, required: true}
 }, { collection: 'order' });
 
 

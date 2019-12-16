@@ -25,9 +25,6 @@ const DATABASE_URL = 'mongodb+srv://Wakka:vicien21@cluster-hnoscuello-mxbyp.gcp.
 
 mongoose.connect(DATABASE_URL, { useNewUrlParser: true}, () =>
   console.log("Connected")).catch(err => console.log(err));
-// mongoose.Promise = global.Promise;
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const categoryRoute = require('./routes/category.route');
 const productRoute = require('./routes/product.route');
